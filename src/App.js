@@ -12,7 +12,7 @@ const App = () => {
   return (
     <div className="App">
       <Router>
-        <h1>Basic router example</h1>
+        <h1>Basic redux example - Counter</h1>
         <Nav/>
         <Switch>
           <Route path="/" exact component={Home} />
