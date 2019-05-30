@@ -1,39 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 
-const Home = () => {
-  return (
-    <h2>Home</h2>
-  )
-}
+import Nav from './components/Nav/Nav';
 
-const Favourites = () => {
-  return (
-    <h2>Favourites</h2>
-  )
-}
+import Home from './views/Home/Home';
+import Favourites from './views/Favourites/Favourites';
+import NotFound from './views/NotFound/NotFound';
 
-const NotFound = () => {
-  return (
-    <h2>404</h2>
-  )
-}
 
 const App = () => {
   return (
     <div className="App">
       <Router>
         <h1>Basic router example</h1>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/fav">Favourites</Link>
-            </li>
-          </ul>
-        </nav>
+        <Nav/>
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/fav" component={Favourites} />
