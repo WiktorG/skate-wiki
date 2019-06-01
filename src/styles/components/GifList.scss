@@ -1,0 +1,52 @@
+.gif-list {
+    padding-top: 15px;
+}
+
+.gif-list__separator {
+    display: block;
+    width: 100%;    
+    height: 15px;
+    background-color: #F5F5F9;
+    border-top: 1px solid #ECECED;
+    border-bottom: 1px solid #ECECED;
+    &:nth-last-of-type(1) {
+        border-bottom: none;
+        border-top: 0;
+    }
+}
+
+.gif-list__el {
+}
+
+.gif-container {
+    display: flex;
+    background-color: #000000;
+    width: 100%;
+}
+
+
+.gif-container img { 
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+}
+
+.gif-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.gif-info h3 {
+    width: 100%;
+}
+
+.gif-info .author {
+    margin-bottom: 15px;
+}
+
+.gif-info .author a {
+    color: #33A3F4;
+}

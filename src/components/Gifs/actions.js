@@ -7,11 +7,11 @@ const initialState = {
     home: {
         nextPage: 0,
         gifs: [],
-        fetching: false,
+        fetching: true,
     },
     fav: {
         gifs: [],
-        fetching: false,
+        fetching: true,
     },
 }
 
