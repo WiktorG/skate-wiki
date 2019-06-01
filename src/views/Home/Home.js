@@ -1,20 +1,16 @@
 import React, { Component } from 'react'
-import { giphyApi } from './../../services/api';
+import { connect } from 'react-redux'
+import './../../components/Gifs/actions'
+
+import { fetchHomeGifs } from './../../components/Gifs/actions'
 
 class Home extends Component {
 
   componentDidMount() {
-    giphyApi.get('', {
-      params: {
-        q: 'skate+tricks+nestor+judkins',
-      }
-    }).then(res => {
-      console.log(res);
-    }) 
+    this.props.fetchHomeGifs();
   }
 
   render() {
-    
     return (
       <React.Fragment>
         <h2>Home</h2>  
@@ -23,4 +19,9 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default connect((state) => ({
+  
+}),
+(dispatch) => ({
+    fetchHomeGifs: (params) => dispatch(fetchHomeGifs(params)),
+}))(Home)
