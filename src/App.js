@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
 
+import Nav from './components/Nav/Nav';
 import TabBar from './components/TabBar/TabBar';
 
 import Home from './views/Home/Home';
@@ -11,7 +12,7 @@ import NotFound from './views/NotFound/NotFound';
 const App = (props) => {
   return (
     <div className="App">
-        <h1>AntDesign example</h1>
+        <Nav/>
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/fav" component={Favourites} />
