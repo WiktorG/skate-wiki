@@ -1,25 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
-import Nav from './components/Nav/Nav';
+import TabBar from './components/TabBar/TabBar';
 
 import Home from './views/Home/Home';
 import Favourites from './views/Favourites/Favourites';
 import NotFound from './views/NotFound/NotFound';
 
 
-const App = () => {
+const App = (props) => {
   return (
     <div className="App">
-      <Router>
-        <h1>Axios example - getting gifs from API</h1>
-        <Nav/>
+        <h1>AntDesign example</h1>
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/fav" component={Favourites} />
           <Route component={NotFound} />
         </Switch>
-      </Router>
+        <TabBar/>
     </div>
   );
 }
