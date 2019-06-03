@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Icon } from 'antd'
+import { Icon, message } from 'antd'
+
 import { handleFavouriteGifAddRemove } from './actions'
+
 class ListEl extends Component {
   state = {
       isGifFavourite: false
@@ -33,7 +35,13 @@ class ListEl extends Component {
   handleStarClick = (gif) => {
     if (this.props.match.url === '/fav') {
         this.setState({isGifFavourite: true});
+        message.success('Removed trick from favourites');
     } else {
+        if (this.state.isGifFavourite) {
+            message.success('Removed trick from favourites');
+        } else {
+            message.success('Added trick to favourites');
+        }
         this.setState({isGifFavourite: !this.state.isGifFavourite});
     }
     this.props.handleFavouriteGifAddRemove(gif);
