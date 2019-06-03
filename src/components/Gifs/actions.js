@@ -38,11 +38,15 @@ const fetchHomeGifs = params => dispatch => {
 
 const fetchFavouriteGifs = params => dispatch => {
     dispatch({type: FETCH_FAV_GIFS_REQUEST});
-    let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
-    if (favouriteGifs === null) {
-        dispatch({type: FETCH_FAV_GIFS_ERROR});
-    } else {
-        dispatch({type: FETCH_FAV_GIFS_SUCCESS, data: favouriteGifs});    
+    try { 
+        let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
+        if (favouriteGifs === null) {
+            dispatch({type: FETCH_FAV_GIFS_ERROR});
+        } else {
+            dispatch({type: FETCH_FAV_GIFS_SUCCESS, data: favouriteGifs});    
+        }
+    } catch {
+
     }
 }
 
@@ -56,27 +60,31 @@ const handleFavouriteGifAddRemove = gif => dispatch => {
             }
         }
     }
-    let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
-    if (favouriteGifs === null) {
-        localStorage.setItem('favouriteGifs', JSON.stringify([necessaryGifData]))
-    } else {
-        let found = false;
-        let foundIndex = null;
-        favouriteGifs.forEach((localGif, i) => {
-            if (localGif.id === gif.id) {
-                found = localGif.id === gif.id;
-                foundIndex = i;
-            }
-        });
-        if (found && foundIndex !== null) {
-            favouriteGifs.splice(foundIndex, 1);
-            localStorage.setItem('favouriteGifs', JSON.stringify(favouriteGifs))
+    try {
+        let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
+        if (favouriteGifs === null) {
+            localStorage.setItem('favouriteGifs', JSON.stringify([necessaryGifData]))
         } else {
-            localStorage.setItem('favouriteGifs', JSON.stringify([...favouriteGifs, necessaryGifData]))
+            let found = false;
+            let foundIndex = null;
+            favouriteGifs.forEach((localGif, i) => {
+                if (localGif.id === gif.id) {
+                    found = localGif.id === gif.id;
+                    foundIndex = i;
+                }
+            });
+            if (found && foundIndex !== null) {
+                favouriteGifs.splice(foundIndex, 1);
+                localStorage.setItem('favouriteGifs', JSON.stringify(favouriteGifs))
+            } else {
+                localStorage.setItem('favouriteGifs', JSON.stringify([...favouriteGifs, necessaryGifData]))
+            }
         }
-        dispatch(fetchFavouriteGifs());
-        dispatch(fetchHomeGifs());
+    } catch {
+        localStorage.removeItem('favouriteGifs');
     }
+    dispatch(fetchFavouriteGifs());
+    dispatch(fetchHomeGifs());
 }
 
 const gifsReducer = (state = initialState, action) => {
@@ -106,6 +114,15 @@ const gifsReducer = (state = initialState, action) => {
                 fav: {
                     ...state.fav,
                     gifs: [...action.data],
+                    fetching: false,
+                }
+            }
+        case FETCH_FAV_GIFS_ERROR: 
+            return {
+                ...state,
+                fav: {
+                    ...state.fav,
+                    gifs: [],
                     fetching: false,
                 }
             }

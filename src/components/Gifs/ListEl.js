@@ -10,17 +10,21 @@ class ListEl extends Component {
 
   componentDidMount() {
     const isGifFavourite = (() => {
-        let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
-        if (favouriteGifs === null) {
-            return false
-        } else {
-            let found = false;
-            favouriteGifs.forEach((gif) => {
-                if (gif.id === this.props.gif.id) {
-                    found = gif.id === this.props.gif.id;
-                }
-            });
-            return found;
+        try {
+            let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
+            if (favouriteGifs === null) {
+                return false
+            } else {
+                let found = false;
+                favouriteGifs.forEach((gif) => {
+                    if (gif.id === this.props.gif.id) {
+                        found = gif.id === this.props.gif.id;
+                    }
+                });
+                return found;
+            }
+        } catch {
+            return false;
         }
     })();
     this.setState({isGifFavourite: isGifFavourite});
