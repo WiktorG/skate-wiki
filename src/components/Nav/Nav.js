@@ -9,7 +9,7 @@ class Nav extends Component {
         <NavBar
             mode="light"
         >
-            AntDesign example
+            Skate Wiki - ReactSzn #2
         </NavBar>
       </div>
     )
