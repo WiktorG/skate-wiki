@@ -2,10 +2,17 @@
 import reedux from 'reedux';
 import store from '../../services/store';
 import { giphyApi } from '../../services/api';
+import { 
+    FETCH_HOME_GIFS_REQUEST,
+    FETCH_HOME_GIFS_SUCCESS,
+    FETCH_HOME_GIFS_ERROR,
+    FETCH_FAV_GIFS_REQUEST,
+    FETCH_FAV_GIFS_SUCCESS,
+    FETCH_FAV_GIFS_ERROR,
+} from '../../services/actions';
 
 const initialState = {
     home: {
-        nextPage: 0,
         gifs: [],
         fetching: true,
     },
@@ -15,16 +22,12 @@ const initialState = {
     },
 }
 
-const FETCH_HOME_GIFS_REQUEST = 'FETCH_HOME_GIFS_REQUEST';
-const FETCH_HOME_GIFS_SUCCESS = 'FETCH_HOME_GIFS_SUCCESS';
-const FETCH_HOME_GIFS_ERROR = 'FETCH_HOME_GIFS_ERROR';
-
-
 const fetchHomeGifs = params => dispatch => {
     dispatch({type: FETCH_HOME_GIFS_REQUEST});
     giphyApi.get('', {
         params: {
           q: 'skate+tricks+nestor+judkins',
+          limit: 8,
         }
       }).then(res => res.data).then(data => {
           dispatch({type: FETCH_HOME_GIFS_SUCCESS, data: data});
@@ -33,6 +36,48 @@ const fetchHomeGifs = params => dispatch => {
       });   
 }
 
+const fetchFavouriteGifs = params => dispatch => {
+    dispatch({type: FETCH_FAV_GIFS_REQUEST});
+    let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
+    if (favouriteGifs === null) {
+        dispatch({type: FETCH_FAV_GIFS_ERROR});
+    } else {
+        dispatch({type: FETCH_FAV_GIFS_SUCCESS, data: favouriteGifs});    
+    }
+}
+
+const handleFavouriteGifAddRemove = gif => dispatch => {
+    const necessaryGifData = { 
+        id: gif.id,
+        title: gif.title,
+        images: {
+            downsized_medium: {
+                url: gif.images.downsized_medium.url,
+            }
+        }
+    }
+    let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
+    if (favouriteGifs === null) {
+        localStorage.setItem('favouriteGifs', JSON.stringify([necessaryGifData]))
+    } else {
+        let found = false;
+        let foundIndex = null;
+        favouriteGifs.forEach((localGif, i) => {
+            if (localGif.id === gif.id) {
+                found = localGif.id === gif.id;
+                foundIndex = i;
+            }
+        });
+        if (found && foundIndex !== null) {
+            favouriteGifs.splice(foundIndex, 1);
+            localStorage.setItem('favouriteGifs', JSON.stringify(favouriteGifs))
+        } else {
+            localStorage.setItem('favouriteGifs', JSON.stringify([...favouriteGifs, necessaryGifData]))
+        }
+        dispatch(fetchFavouriteGifs());
+        dispatch(fetchHomeGifs());
+    }
+}
 
 const gifsReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -49,13 +94,21 @@ const gifsReducer = (state = initialState, action) => {
                 ...state,
                 home: {
                     ...state.home,
-                    nextPage: state.home.nextPage+1,
-                    gifs: [...state.home.gifs, ...action.data.data],
+                    gifs: [...action.data.data],
                     fetching: false,
                 }
             }
         case FETCH_HOME_GIFS_ERROR:
             return state
+        case FETCH_FAV_GIFS_SUCCESS: 
+            return {
+                ...state,
+                fav: {
+                    ...state.fav,
+                    gifs: [...action.data],
+                    fetching: false,
+                }
+            }
         default: 
             return state;
     }
@@ -65,4 +118,4 @@ const storePath = reedux(store)
 const reducer = storePath('gifs', initialState);
 reducer(gifsReducer);
 
-export { fetchHomeGifs }
+export { fetchHomeGifs, fetchFavouriteGifs, handleFavouriteGifAddRemove }
