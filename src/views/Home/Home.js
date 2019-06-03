@@ -11,15 +11,13 @@ import GifList from './../../components/Gifs/List'
 class Home extends Component {
 
   componentDidMount() {
-    if (this.props.gifs.home.nextPage === 0) {
-      this.props.fetchHomeGifs();
-    }
+    this.props.fetchHomeGifs();
   }
 
   render() {
     return (
       <div className="gif-list">
-        <GifList />
+        <GifList gifs={this.props.gifs.home.gifs} />
       </div>
     )
   }

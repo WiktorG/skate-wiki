@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { ListView } from 'antd-mobile';
 
 import ListEl from './ListEl';
@@ -9,7 +8,7 @@ class GifList extends Component {
     let dataSource = new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    dataSource = dataSource.cloneWithRows(this.props.gifs.home.gifs);
+    dataSource = dataSource.cloneWithRows(this.props.gifs);
     return (
       <ListView 
         ref={el => this.lv = el}
@@ -31,8 +30,4 @@ class GifList extends Component {
   }
 }
 
-export default connect(state => ({
-    gifs: state.gifs,
-}), dispatch => ({
-
-}))(GifList)
+export default GifList

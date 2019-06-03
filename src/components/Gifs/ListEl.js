@@ -1,33 +1,61 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-
+import { Icon } from 'antd'
+import { handleFavouriteGifAddRemove } from './actions'
 class ListEl extends Component {
+  state = {
+      isGifFavourite: false
+  }
+
+  componentDidMount() {
+    const isGifFavourite = (() => {
+        let favouriteGifs = JSON.parse(localStorage.getItem('favouriteGifs'));
+        if (favouriteGifs === null) {
+            return false
+        } else {
+            let found = false;
+            favouriteGifs.forEach((gif) => {
+                if (gif.id === this.props.gif.id) {
+                    found = gif.id === this.props.gif.id;
+                }
+            });
+            return found;
+        }
+    })();
+    this.setState({isGifFavourite: isGifFavourite});
+  }
+
+  handleStarClick = (gif) => {
+    if (this.props.match.url === '/fav') {
+        this.setState({isGifFavourite: true});
+    } else {
+        this.setState({isGifFavourite: !this.state.isGifFavourite});
+    }
+    this.props.handleFavouriteGifAddRemove(gif);
+  }
+
   render() {
-    console.log(this.props.gif.user);
     return (
         <div className="gif-list__el" key={this.props.gif.id} >
             <div className="gif-container">
                 <img src={this.props.gif.images.downsized_medium.url} alt={this.props.gif.title}/>
             </div>
             <div className="gif-info">
-                <h3>{this.props.gif.title}</h3>
-                <span className="author">{(this.props.gif.user !== undefined) ? (
-                    <React.Fragment>
-                        Author:&nbsp;
-                        <a href={this.props.gif.user.profile_url} target="_blank" rel="nofollow"> 
-                            {this.props.gif.user.display_name}
-                        </a>
-                    </React.Fragment>
-                    ) : ''} 
-                </span>
+                <Icon 
+                    type="star" 
+                    className="gif-info__star" 
+                    onClick={(e) => { e.preventDefault(); this.handleStarClick(this.props.gif);  } }  
+                    theme={this.state.isGifFavourite ? 'filled' : 'outlined' }
+                />
             </div>
         </div>
     )
   }
 }
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
 
 }), dispatch => ({
-
-}))(ListEl)
+    handleFavouriteGifAddRemove: gif => dispatch(handleFavouriteGifAddRemove(gif)),
+}))(ListEl))
