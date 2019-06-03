@@ -19,7 +19,7 @@ class Favourites extends Component {
         {
           this.props.gifs.fav.gifs.length === 0 ? 
           <div className="gif-list__empty">
-            <h1>No favourite gifs :(</h1>
+            <h1>No favourite tricks :(</h1>
           </div>
           : 
           <GifList gifs={this.props.gifs.fav.gifs} />
