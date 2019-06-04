@@ -1,6 +1,7 @@
 .gif-list {
     padding-top: 15px;
     background-color: #F5F5F9;
+    min-height: calc( 100vh - 95px );
 }
 
 .gif-list__empty {
