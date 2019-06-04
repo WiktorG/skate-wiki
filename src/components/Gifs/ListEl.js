@@ -37,12 +37,10 @@ class ListEl extends Component {
         this.setState({isGifFavourite: true});
         message.success('Removed trick from favourites');
     } else {
-        if (this.state.isGifFavourite) {
-            message.success('Removed trick from favourites');
-        } else {
-            message.success('Added trick to favourites');
-        }
-        this.setState({isGifFavourite: !this.state.isGifFavourite});
+        this.setState({isGifFavourite: !this.state.isGifFavourite}, () => {
+            this.state.isGifFavourite ? 
+            message.success('Added trick to favourites') : message.success('Removed trick from favourites');
+        });
     }
     this.props.handleFavouriteGifAddRemove(gif);
   }
