@@ -65,7 +65,6 @@ class ListEl extends Component {
 }
 
 export default withRouter(connect(state => ({
-
 }), dispatch => ({
     handleFavouriteGifAddRemove: gif => dispatch(handleFavouriteGifAddRemove(gif)),
 }))(ListEl))
